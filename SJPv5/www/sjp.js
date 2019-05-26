@@ -3,7 +3,7 @@ var DEBUG=true;
 var minutes = 1000 * 60; //Milliseconds
 var hours = minutes * 60;//Milliseconds
 var day = hours * 24;//Milliseconds
-var t; //t : number of Julian centuries since J2000.0 t = ((jd - 2415020) + f/24 - 0.5)/36525;  
+var t; //t : number of Julian centuries since J2000.0 t = ((jd - 2415020) + f/24 - 0.5)/36525;
 var nakshatra =["Ashvini-Ke","Bharani-Ve","Kritika-Su","Rohini-Mo","Mrigashira-Ma","Ardra-Ra","Punarvasu-Ju","Pushya-Sa","Ashlesha-Me","Magha-Ke","Purva Phalguni-Ve","Uttara Phalguni-Su","Hasta-Mo","Chitra-Ma","Swati-Ra","Vishakha-Ju","Anuradha-Sa","Jyeshtha-Me","Mula-Ke","Purva Ashadha-Ve","Uttara Ashadha-Su","Shravan-Mo","Dhanistha-Ma","Shatabhishaj-Ra","Purva Bhadrapad-Ju","Uttara Bhadrapad-Sa","Revati-Me"];
 var nakshatra_s=["As","Bh","Kr","Ro","Mr","Ar","Pv","Pu","As","Mg","PP","UP","Ha","Ch","Sw","Vi","An","Jy","Mu","UA","PA","Sr","Dh","Sh","PB","UB","Re"];
 var yogas = ["Vishkambha-विष्कम्भ-(Sa)","Priti-प्रीति-(Me)","Ayushman-आयुष्मान-(Ke)","Saubhagya-सौभाग्य-(Ve)","Shobhana-शोभन-(Su)","Atiganda-अतिगण्ड -(Mo)","Sukarman-सुकर्मा -(Ma)","Dhriti-धृति -(Ra)","Shula-शूल -(Ju)","Ganda-गण्ड -(Sa)","Vriddhi-वृद्धि -(Me)","Dhruva-ध्रुव -(Ke)","Vyaghata-व्याघात-(ve)","Harshana-हर्षण-(su)","Vajra-वज्र-(Mo)","Siddhi-सिद्धि-(Ma)","Vyatipata-व्यतिपात-(Ra)","Varigha-वरीयस्-(Ju)","Parigha-परिघ-(Sa)","Shiva-शिव-(Me)","Siddha-सिद्ध-(Ke)","Sadhya-साध्य-(Ve)","Shubha-शुभ-(Su)","Shukla-शुक्ल-(Mo)","Brahma-ब्रह्म-(Ma)","Mahendra-महेन्द्र-(Ra)","Vaidhriti-वैधृति"];
@@ -44,7 +44,7 @@ var params; //The URL Parameters passed to this page.
 var places=new MyArray();
 var places_file = "places.txt";
 var xml_file_opened = false;
-var places_c="Puri#-85.83;19.81&New Delhi#-77.208833;28.613806&Chennai#-80.23;13.5&WashingtonDC#77.0366;38.8977"; //Default Places
+var places_c="Puri#-85.83;19.81&New Delhi#-77.208833;28.613806&Mumbai#-72.83;18.92&Chennai#-80.23;13.5&WashingtonDC#77.0366;38.8977"; //Default Places
 var chart =[
             {"text":"Asc/Lagna   ","long":0,"retro":" - ","speed":0,"id":0,"bhava":0,"tx":"Lg","order":0},
             {"text":"Sun/Surya   ","long":0,"retro":"","speed":0,"id":1,"bhava":0,"tx":"Su","order":1},
@@ -196,7 +196,7 @@ function getLagnaTable(AscData,date_time,longitude,latitude){
 /// .html         : formatted html with all the values. for other values please read the function below with all "this."
 
 function getPanchanga(date_time,longitude,latitude){
-	
+
     this.date_time = date_time = new Date(date_time);
     var cur_date=Date.parse(date_time);  //In Milliseconds.
     this.grahas = new getGrahas(date_time);
@@ -205,7 +205,7 @@ function getPanchanga(date_time,longitude,latitude){
 	var a=date_time;
     this.grahas.grahas[7] = (this.AscData.node+360)%360; //Nodes are coming as -ve values sometime so correcting.
     this.grahas.grahas[8] = this.AscData.Ascendant;
-	
+
     for(i=0;i<7;++i){
             this.grahas.grahas[i]=(360+this.grahas.grahas[i]+this.AscData.Ayanamsa)%360;
         }
@@ -299,7 +299,7 @@ function getPanchanga(date_time,longitude,latitude){
     this.rasiHTML = getChart(chart,"<small>"+this.vara_name+","+this.nakshatra_name+","+this.tithi_name
 				+","+this.karana_name+","+this.yoga_name+"</small>");
 
-    this.html = "\n<p><b>Panchanga on </b> "+this.date_time+ "<br/><br/>";//calcLocalTime(this.date_time).toLocaleString() (TZ Issue) 
+    this.html = "\n<p><b>Panchanga on </b> "+this.date_time+ "<br/><br/>";//calcLocalTime(this.date_time).toLocaleString() (TZ Issue)
     this.html += "<style scoped type=\"text/css\"> body{background-color:#ffcc33;} input,select{background-color:#ffff99;} </style>";
     this.html+= this.rasiHTML;
     this.html+= "<a href=SJPamsha.htm?Lagna="+chart[0].long+"&Sun="+chart[1].long+"&Moon="+chart[2].long+
@@ -337,20 +337,20 @@ function getPanchanga(date_time,longitude,latitude){
     }
     this.html+= "\n<br/><br/><b>Samvatsara </b>"+this.sSamvatsara;
     this.html+= "\n<br/><b>Saura Maasa </b>"+this.sSauraMaasa;
- 
+
     this.html+="\n<br/><b> Ayanamsha:</b>" + toDeg(this.AscData.Ayanamsa)+
                 "\n<br/><br/>";
-	
+
     chart.sort(function(a,b){return a.long - b.long;});
     this.html =this.html + "<table><tr><th><b><small>Graha</small></b></th><th><b><small> sRasi d&deg; mm</small></b></th><th><b><small>Bhava</small></b></th><th><b><small>longitude</small></b></th></tr>";
     for(i=0;i<10;++i){
         this.html =this.html + "<tr><td><b>"+chart[i].text+chart[i].retro+"</b></td><td>" +toSignDeg(chart[i].long)+ "</td><td> ("+(chart[i].bhava)+")</td><td>"+toDeg(chart[i].long)+"</td></tr>";
     }
     chart.sort(function(a,b){return a.order - b.order;});
-    
+
     this.html+= "<a href=SJPdasa.htm?degrees="+escape(chart[2].long)+"&timezone="+encodeURIComponent(TimeZoneOffset)+
                 "&datetime="+encodeURIComponent(this.date_time.toString())+"&antaradasha=1&submit=Calculate>Moon Vimshottari Dasa</a></br>";
-     
+
     this.html =this.html +"</tr></table>"+
                 "\n<br/><b>Maandi Day Time & Position:</b>"+formatTimeSS(this.MaandiDayTime)+ " - " + toSignDeg(this.MaandiDay.Ascendant)+
                 "\n<br/><b>Maandi Night Time & Position:</b>"+formatTimeSS(this.MaandiNightTime)+ " - " + toSignDeg(this.MaandiNight.Ascendant)+
@@ -358,7 +358,7 @@ function getPanchanga(date_time,longitude,latitude){
                 "\n<br/><br/>"+this.kaalatable.html+
                 "\n<br/>"+this.horatable.html+
                 "\n<br/>"+this.muhurthatable.html+
-                "\n<br/>"+this.BhaavaTable+			
+                "\n<br/>"+this.BhaavaTable+
                 "\n</p>";
     return this;
 }
@@ -367,8 +367,8 @@ function getPanchanga(date_time,longitude,latitude){
 function getLocation() {//Check for Geolocation and get it.
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(showPosition,showError);
-        
-    } else { 
+
+    } else {
         alert("Geolocation is not supported by this browser.");
     }
 }
@@ -475,14 +475,14 @@ function calcEqofTime(gamma){
         return radToDeg(Etime)*4.0;    // in minutes of time
 
     }
-	
-	
+
+
 
 // ***********************************************************************
 //* Name:    calGeomMeanLongSun                         *
 //* Type:    Function                                    *
 //* Purpose: calculate the Geometric Mean Longitude of the Sun        *
-//* Arguments:                                        
+//* Arguments:
 //*   t : number of Julian centuries since J2000.0                *
 //* Return value:                                        *
 //*   the Geometric Mean Longitude of the Sun in degrees            *
@@ -499,8 +499,8 @@ function calcGeomMeanLongSun(t)    {
         }
         return L0;        // in degrees
     }
-	
-	
+
+
 //***********************************************************************
 //* Name:    calGeomAnomalySun                            *
 //* Type:    Function                                    *
@@ -550,7 +550,7 @@ function calcSunEqOfCenter(t){
     }
 //***********************************************************************
 //* Name:    calcSunTrueLong                                *
-//* Type:    Function                                    
+//* Type:    Function
 //* Purpose: calculate the true longitude of the sun                *
 //* Arguments:                                        *
 //*   t : number of Julian centuries since J2000.0                *
@@ -598,7 +598,7 @@ function calcMeanObliquityOfEcliptic(t){
 
 //***********************************************************************
 //* Name:    calcObliquityCorrection                        *
-//* Type:    Function                                    
+//* Type:    Function
 //* Purpose: calculate the corrected obliquity of the ecliptic        *
 //* Arguments:                                        *
 //*   t : number of Julian centuries since J2000.0                *
@@ -625,7 +625,7 @@ function calcObliquityCorrection(t){
 function calcSunRtAscension(t){
         var e = calcObliquityCorrection(t);
         var lambda = calcSunApparentLong(t);
- 
+
         var tananum = (Math.cos(degToRad(e)) * Math.sin(degToRad(lambda)));
         var tanadenom = (Math.cos(degToRad(lambda)));
         var alpha = radToDeg(Math.atan2(tananum, tanadenom));
@@ -678,7 +678,7 @@ function calcSunriseGMT(julDay, latitude, longitude){
     timeGMT = 720 + timeDiff - eqTime; // in minutes
     return timeGMT;
 }
-function calcRiseTime(degree,latitude,longitude){  
+function calcRiseTime(degree,latitude,longitude){
 	console.log("calcRiseTime"+degree+","+latitude+","+longitude+">"+degree/360*Math.PI);
     var gamma = calcGamma(degree/360*365.25);
     var eqTime = calcEqofTime(gamma);
@@ -786,7 +786,7 @@ function getKaalaTable(vara_cur,sunrise,sunset){
     kaala.setTime(sunset.getTime());
     var kaalaunit= (24*hours-sunset.getTime()+sunrise.getTime())/8;
     this.html+="<tr><td colspan=4 align=center><b>Night Time</b></td></tr>";
-    for(i=0;i<8;++i){                    
+    for(i=0;i<8;++i){
         g=(4+i+kaalachakra_start[vara_cur])%8;
         c=(5-i*2+caughadia_start[vara_cur]+21)%7;
         this.kaala_start[k] = new Date();
@@ -797,11 +797,11 @@ function getKaalaTable(vara_cur,sunrise,sunset){
             this.html+="<tr><td style='color:red;font-weight: bold;'>"+formatTime(this.kaala_start[k]);
         else
             this.html+="<tr><td>"+formatTime(this.kaala_start[k]);
-                this.html+="</td><td>"+this.kaala_name[k]+"</td>"+"<td id=G"+(i+8)+">"+(i===7?"--":GulikaChakra[(vara_cur+i+4)%7])+"</td>"+"<td>"+this.caughadia_name[k]+"</td>"+"</tr>";    
+                this.html+="</td><td>"+this.kaala_name[k]+"</td>"+"<td id=G"+(i+8)+">"+(i===7?"--":GulikaChakra[(vara_cur+i+4)%7])+"</td>"+"<td>"+this.caughadia_name[k]+"</td>"+"</tr>";
                 kaala.setTime(kaala.getTime()+kaalaunit);
         ++k;
     }
-        
+
     this.html+="</table>";
     return this;
 }
@@ -829,7 +829,7 @@ function getMuhurthaTable(sunrise,sunset,paksha,vaara){
 		this.muhurtha_start[k] = new Date();
         this.muhurtha_start[k].setTime(m.getTime());
         this.muhurtha_name[k]= muhurtha[i];
-        this.html+="<tr><td>"+this.muhurtha_name[k]; 
+        this.html+="<tr><td>"+this.muhurtha_name[k];
 		if(cur_time>this.muhurtha_start[k])
             this.html+="</td><td style='color:red;font-weight: bold;'>"+formatTime(this.muhurtha_start[k]);
         else
@@ -849,7 +849,7 @@ function getMuhurthaTable(sunrise,sunset,paksha,vaara){
 		}
         this.html+="</td></tr>";
 		m.setTime(m.getTime()+muhurtha_unit);
-		
+
     }
      this.html+="</table>";
     return this;
@@ -888,7 +888,7 @@ function BinarySearch(startval,endval,tofind,diff,func){
 
 //Start Following code from http://www.astrojyoti.com/calculatoroflagna.htm
 
-function calculateAscendant(date_time,latitude,longitude){//Returns Ascendant Object 
+function calculateAscendant(date_time,latitude,longitude){//Returns Ascendant Object
 	//alert(date_time);
     this.date=date_time=new Date(date_time);
    // with(Math){
@@ -905,7 +905,7 @@ function calculateAscendant(date_time,latitude,longitude){//Returns Ascendant Ob
     f=hr+tz;
     //if(ln < 0.0)f = hr - tz;
     //else f = hr+tz;
-    t = ((jd - 2415020) + f/24 - 0.5)/36525; 
+    t = ((jd - 2415020) + f/24 - 0.5)/36525;
     ayObj = new calcAyanamsa(t);
     ay = this.Ayanamsa= ayObj.ayanamsa;
     this.node = ayObj.node;
@@ -943,7 +943,7 @@ function calculateAscendant(date_time,latitude,longitude){//Returns Ascendant Ob
     var hs = new MyArray(24);
     x = as - mc; //Difference between Asc and Mid Heaven
     if(x < 0.0)x += 360.0; //If negative make it +ve
-    x /= 6; //Divide that distance in 6 parts 
+    x /= 6; //Divide that distance in 6 parts
     y = 18; // 10th house in the MyArray
     for(i = 0; i < 7; i++){
         hs[y] = mc + x * i;
@@ -1010,8 +1010,8 @@ return this;
 // Calculate the Lahiri Ayanamsa by using Erlewine Fagan-Bradley sidereal calculation
 // with correction using Lahiri 1900 value in minutes (see below)
 function calcAyanamsa(t){
-    ln = ((933060-6962911*t+7.5*t*t)/3600.0) % 360.0;  //* Mean lunar node 
-    Off = (259205536.0*t+2013816.0)/3600.0;             //* Mean Sun       
+    ln = ((933060-6962911*t+7.5*t*t)/3600.0) % 360.0;  //* Mean lunar node
+    Off = (259205536.0*t+2013816.0)/3600.0;             //* Mean Sun
     Off = 17.23*Math.sin(d2r * ln)+1.27*Math.sin(d2r * Off)-(5025.64+1.11*t)*t;
     Off = (Off- 80861.27)/3600.0;  // 84038.27 = Fagan-Bradley 80861.27 = Lahiri
     this.ayanamsa = Off;
@@ -1020,7 +1020,7 @@ function calcAyanamsa(t){
 }
 
 // calculate Julian Day from Month, Day and Year
-//The Julian Day Number (JDN) is the integer assigned to a whole solar day in the Julian day count starting from noon Universal time, with Julian day number 0 assigned to the day starting at noon on January 1, 4713 BC, proleptic Julian calendar 
+//The Julian Day Number (JDN) is the integer assigned to a whole solar day in the Julian day count starting from noon Universal time, with Julian day number 0 assigned to the day starting at noon on January 1, 4713 BC, proleptic Julian calendar
 //For example, the Julian Date for 00:30:00.0 UT January 1, 2013, is 2,456,293.520833.
 function mdy2julian(m,d,y){
     with(Math){
@@ -1081,12 +1081,12 @@ function getXMLFile(f){
     try{
         xmlHttp.open("GET",file,false);
         }catch(err){
-        alert("GET error:"+file+":"+err.description);        
-    }    
+        alert("GET error:"+file+":"+err.description);
+    }
         try{
             xmlHttp.send();//null
     }catch(err){
-        alert("send error:"+file+":"+xmlHttp.status+"--"+err );        
+        alert("send error:"+file+":"+xmlHttp.status+"--"+err );
     }
 }
 function stateChanged(){
@@ -1121,7 +1121,7 @@ function doForm(){//Checked
     var d= new Date(params["bdate"]);
     var t= new Date("January 1, 1970 "+params["btime"]);
     TimeZoneOffset = parseFloat(params["timezone"]);
-	if(isNaN(TimeZoneOffset)) 
+	if(isNaN(TimeZoneOffset))
 	   {
 		   TimeZoneOffset=-1 * d.getTimezoneOffset()/60;
 		   alert("Corrected Invalid Time Zone Offset to Local Time Zone:"+params["timezone"]+" to "+TimeZoneOffset);
@@ -1135,7 +1135,7 @@ function doForm(){//Checked
 	d.setUTCSeconds(t.getSeconds());
 	d.setUTCMilliseconds(t.getMilliseconds());
     if(isNaN(d)){
-        alert("Invalid Date Time:"+params["bdate"]+" "+params["btime"]+"\n Using Current date time"); 
+        alert("Invalid Date Time:"+params["bdate"]+" "+params["btime"]+"\n Using Current date time");
         d=new Date();
     }
     lon = parseFloat(setCookie("latitude",params["longitude"],1000));
@@ -1186,9 +1186,9 @@ function populatePlacesList(p){
         catch(ex)
         {
             o.add(y);
-        }    
+        }
     }
-        return;    
+        return;
 }
 function LoadPlacesListener(e) {
         var file = PlacesInput.files[0];
@@ -1196,7 +1196,7 @@ function LoadPlacesListener(e) {
         var reader = new FileReader();
         reader.onload = function(e) {
             t = reader.result;
-            t=t.replace(RegExp("[\n\r]","g"),""); //replace new line 
+            t=t.replace(RegExp("[\n\r]","g"),""); //replace new line
             places_c = places_c+"&"+t;
             populatePlacesList(places_c);
             };
@@ -1206,10 +1206,10 @@ function LoadPlacesFile(p){
         console.log(places_file);
     getXMLFile(places_file); //This function should open then file in background
     i=0;
-    if(xml_file_opened){ //Check if by now the file opened ,else? maybe we should add a wait        
+    if(xml_file_opened){ //Check if by now the file opened ,else? maybe we should add a wait
             window.status="Parsing..."+places_file;
             var t=xmlHttp.responseText;
-            t=t.replace(RegExp("[\n\r]","g"),""); //replace new line 
+            t=t.replace(RegExp("[\n\r]","g"),""); //replace new line
             places_c = places_c+"&"+t;
             populatePlacesList(places_c);
     }
@@ -1231,7 +1231,7 @@ function pause(numberMillis) {
 function LoadFile(p){
     xml_file_opened = false;
     if(p.length>30)return p; //Dont Load File if the filename too large. it means the file name is the data.
-    getXMLFile(p); //This function should open then file in background    
+    getXMLFile(p); //This function should open then file in background
     i=0;
     do{
         getXMLFile(p);
@@ -1321,7 +1321,7 @@ function hex2int(str){
             if(k>=0){
                 v=v+k*pow;
                 pow=pow/60;
-            }    
+            }
             else return -1;
         }catch(err){
             console.log(err.message);
@@ -1416,7 +1416,7 @@ function hex2int(str){
 		    if(k>=0){
 		    	v=v+k*pow;
 		    	pow=pow/60;
-		    }	
+		    }
 		    else return -1;
 		}catch(err){
 		    console.log(err.message);
@@ -1442,22 +1442,22 @@ function init(){
 	document.getElementById("bdate").value  = formatDate(bdate);
 //	debug(bdate,">>>"+document.getElementById("bdate").value,bdate.getFullYear()+"-"+(bdate.getMonth()+1)+"-"+bdate.getDate());
 	var tstring=formatTimeSS(today);
-	document.getElementById("btime").value= params['btime']===undefined?tstring:params['btime'];	
-//	document.getElementById("date").value = params['date']===undefined?today.toString():params['date'];	
+	document.getElementById("btime").value= params['btime']===undefined?tstring:params['btime'];
+//	document.getElementById("date").value = params['date']===undefined?today.toString():params['date'];
 	var date= new Date(document.getElementById("bdate").value+" "+document.getElementById("btime").value);;
-//	document.getElementById("date").value = params['date']===undefined?date.toString():params['date'];	
+//	document.getElementById("date").value = params['date']===undefined?date.toString():params['date'];
 	document.getElementById("chartname").value = params['chartname']===undefined?"Prashna":params['chartname'];
 	document.getElementById("timezone").value = params['chartname']===undefined?-1*today.getTimezoneOffset()/60:params['timezone'];
 	document.getElementById('longitude').value = params["longitude"]===undefined?getCookie('longitude'):params["longitude"];
 	document.getElementById('latitude').value = params["latitude"]===undefined?getCookie('latitude'):params["latitude"];
 	document.getElementById('placename').value = params["placename"]===undefined?getCookie('placename'):params["placename"];
-	if(document.getElementById('longitude').value==="") document.getElementById('longitude').value = "-80.23";
-	if(document.getElementById('latitude').value==="") document.getElementById('latitude').value = "13.5";
-	if(document.getElementById('placename').value==="") document.getElementById('placename').value = "Chennai";
-	
+	if(document.getElementById('longitude').value==="") document.getElementById('longitude').value = "-72.83";
+	if(document.getElementById('latitude').value==="") document.getElementById('latitude').value = "18.92";
+	if(document.getElementById('placename').value==="") document.getElementById('placename').value = "Mumbai";
+
         places_c = getCookie('placeslist');
 		if(places_c===""){
-		places_c="Puri#-85.83;19.81&New Delhi#-77.208833;28.613806&Chennai#-80.23;13.5&WashingtonDC#77.0366;38.8977";
+		places_c="Puri#-85.83;19.81&New Delhi#-77.208833;28.613806&Mumbai#-72.83;18.92&Chennai#-80.23;13.5&WashingtonDC#77.0366;38.8977";
 	   }
 	populatePlacesList(places_c);
 	window.status="Intialised Form";
@@ -1479,7 +1479,7 @@ function ListenToJHDloader(e) {
 	datetime=datetime.replace("\r","");
 	var d=new Date(datetime);
 	document.getElementById("bdate").value  = formatDate(d); //4:23 PM 10/30/2017 Added toLocaleDateString() since it was not working on US time zone. on IE?
-	document.getElementById("btime").value  = formatTimeSS(d);				
+	document.getElementById("btime").value  = formatTimeSS(d);
 	var tzone = lines[4].split(".");
 	tzone[0] = tzone[0] * -1;
 	tzone[1] = tzone[1]/60;
@@ -1503,12 +1503,12 @@ function ListenToFileLoad(e){
 }
 //////
 function calculate(){
- 	document.getElementsByTagName("body")[0].innerHTML="";	
+ 	document.getElementsByTagName("body")[0].innerHTML="";
 	doForm();
 	document.close();
 }
 //var map;
-//var myCenter=new google.maps.LatLng(13.042020847922622,80.26611328125);
+//var myCenter=new google.maps.LatLng(18.92,72.83);
 //Code from https://developers.google.com/maps/documentation/javascript/examples/map-simple-async
 console.log("declare placemarker");
 function placeMarker(location) {
@@ -1533,15 +1533,15 @@ function initialize() {//Called thru callback
 	console.log("Entered initialize");
 	//alert("Please wait a moment while loading Google maps...");
 	latlong={
-          center:{lat: 13, lng: 80.135},
+          center:{lat: 18.92, lng: 72.83},
           zoom: 8
         };
 	m=document.getElementById("googleMap");
 	console.log(m);
 	console.log("entered initialize");
       map = new google.maps.Map(m, latlong);
-      map.addListener('click', 
-			function(event){placeMarker(event.latLng, map);	}	  
+      map.addListener('click',
+			function(event){placeMarker(event.latLng, map);	}
 		);
 	  return;
 }
@@ -1549,7 +1549,7 @@ function initialize_old() {//Called thru callback
 	console.log("Entered initialize");
 	//alert("Please wait a moment while loading Google maps...");
 	latlong={
-          center:{lat: 13, lng: 80.135},
+          center:{lat: 18.92, lng: 72.83},
           zoom: 0,
 		  scrollwheel: false,
         streetViewControl: false,
@@ -1562,8 +1562,8 @@ function initialize_old() {//Called thru callback
 	console.log(m);
 	console.log("entered initialize");
       map = new google.maps.Map(m, latlong);
-      map.addListener('click', 
-			function(event){placeMarker(event.latLng, map);	}	  
+      map.addListener('click',
+			function(event){placeMarker(event.latLng, map);	}
 		);
 	  return;
 }
@@ -1589,11 +1589,11 @@ function initSJP(){
 				document.getElementById(p[0]).value =document.getElementById(p[0]).value.replace(/\+/g," ");
 				document.getElementById(p[0]).value=unescape(p[1]);
 				p[1]=p[1].replace(/\+/g," ");
-				params[p[0]]=unescape(p[1]);		
+				params[p[0]]=unescape(p[1]);
 				if(p[0]==="submit" && p[1]==="Calculate")submit=true;
 			}
 	}
 	window.status="Set values.";
 	if(submit===true)calculate();
-	
+
 }
